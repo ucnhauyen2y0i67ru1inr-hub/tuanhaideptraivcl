@@ -30,7 +30,7 @@
 #define MAX_CONCURRENT_STREAMS_PER_CONNECTION 100
 #define PAYLOAD_SIZE (128 * 1024)
 
-// Timeout được đặt ở 0.5 giây (500 triệu nano giây)
+
 #define CONNECTION_TIMEOUT_NS 500000000L
 
 // --- CONSOLE COLORS ---
@@ -321,4 +321,5 @@ int main(int argc, char *argv[]) {
     free(ssl_locks);
     
     free(g_payload_buffer); SSL_CTX_free(g_ssl_ctx); return 0;
+
 }
