@@ -1,4 +1,4 @@
-name: C Build and Run
+name: Run Script
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  build-and-run:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,9 +25,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y build-essential libssl-dev libnghttp2-dev
-
-      - name: Build program
-        run: gcc src/main.c -o main
 
       - name: Make run.sh executable
         run: chmod +x run.sh
@@ -40,12 +37,4 @@ jobs:
           else
             echo "Running with default URL"
             ./run.sh "https://example.com"
-          fi
-
-      - name: Display result
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Script execution completed for URL: ${{ github.event.inputs.target_url }}"
-          else
-            echo "Script execution completed for URL: https://example.com"
           fi
