@@ -1,0 +1,34 @@
+name: C Build and Run
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Lấy code về
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Cài compiler và các thư viện cần thiết
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential libssl-dev libnghttp2-dev
+
+      # Build (nếu cần compile source C thủ công)
+      - name: Build program
+        run: gcc src/main.c -o main
+
+      # Cho script quyền chạy
+      - name: Make run.sh executable
+        run: chmod +x run.sh
+
+      # Chạy script, có thể truyền tham số URL (ví dụ github.com)
+      - name: Run script with argument
+        run: ./run.sh https://example.com
