@@ -1,13 +1,10 @@
 name: C Build and Run
 
 on:
-  # Trigger tự động khi push/PR
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  
-  # Trigger thủ công với input URL
   workflow_dispatch:
     inputs:
       target_url:
@@ -21,35 +18,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Lấy code về
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Cài compiler và thư viện
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y build-essential libssl-dev libnghttp2-dev
 
-      # Build program
       - name: Build program
         run: gcc src/main.c -o main
 
-      # Cho script quyền chạy
       - name: Make run.sh executable
         run: chmod +x run.sh
 
-      # Chạy script với URL
       - name: Run script
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Running with custom URL: ${{ github.event.inputs.target_url }}"
             ./run.sh "${{ github.event.inputs.target_url }}"
           else
-            echo "Running with default URL (auto trigger)"
+            echo "Running with default URL"
             ./run.sh "https://example.com"
           fi
 
-      # Output kết quả (optional)
       - name: Display result
-        run: echo "Script execution completed for URL: ${{ github.event.inputs.target_url || 'https://example.com' }}"
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Script execution completed for URL: ${{ github.event.inputs.target_url }}"
+          else
+            echo "Script execution completed for URL: https://example.com"
+          fi
