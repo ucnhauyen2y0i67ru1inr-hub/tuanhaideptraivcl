@@ -13,7 +13,7 @@ OUT="attack_program"
 # - xuất binary attack_program
 # - ẩn stdout/stderr nếu biên dịch thành công
 # - nếu lỗi, hiện lỗi bình thường
-gcc main.c -o "$OUT" -lssl -lcrypto -lnghttp2 -lpthread >/dev/null 2>&1
+gcc attack.c -o "$OUT" -lssl -lcrypto -lnghttp2 -lpthread >/dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "❌ Compile failed!"
   exit 1
