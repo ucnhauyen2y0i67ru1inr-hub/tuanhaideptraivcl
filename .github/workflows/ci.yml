@@ -1,22 +1,20 @@
-name: Run Script
+name: Parallel Attack Workflow
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
     inputs:
       target_url:
-        description: 'Target website URL to test'
+        description: 'Target URL'
         required: true
         default: 'https://example.com'
-        type: string
 
 jobs:
-  run-script:
+  attack-job:
     runs-on: ubuntu-latest
-    timeout-minutes: 3  # Safety timeout cho cả job
+    strategy:
+      fail-fast: false
+      matrix:
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
     steps:
       - name: Checkout repository
@@ -30,13 +28,7 @@ jobs:
       - name: Make run.sh executable
         run: chmod +x run.sh
 
-      - name: Run script (60s timeout)
+      - name: Run attack script (Instance #${{ matrix.instance }})
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Running with custom URL: ${{ github.event.inputs.target_url }}"
-            timeout 60s ./run.sh "${{ github.event.inputs.target_url }}"
-          else
-            echo "Running with default URL"
-            timeout 60s ./run.sh "https://example.com"
-          fi
-          echo "Script completed or timed out after 60 seconds"
+          echo "Starting attack from instance ${{ matrix.instance }}"
+          timeout 60s ./run.sh "${{ github.event.inputs.target_url }}"
