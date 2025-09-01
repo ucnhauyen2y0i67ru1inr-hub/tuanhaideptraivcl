@@ -16,6 +16,7 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    timeout-minutes: 3  # Safety timeout cho cả job
 
     steps:
       - name: Checkout repository
@@ -29,12 +30,13 @@ jobs:
       - name: Make run.sh executable
         run: chmod +x run.sh
 
-      - name: Run script
+      - name: Run script (60s timeout)
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Running with custom URL: ${{ github.event.inputs.target_url }}"
-            ./run.sh "${{ github.event.inputs.target_url }}"
+            timeout 60s ./run.sh "${{ github.event.inputs.target_url }}"
           else
             echo "Running with default URL"
-            ./run.sh "https://example.com"
+            timeout 60s ./run.sh "https://example.com"
           fi
+          echo "Script completed or timed out after 60 seconds"
