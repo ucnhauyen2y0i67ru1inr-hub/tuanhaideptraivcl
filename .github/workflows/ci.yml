@@ -6,7 +6,7 @@ on:
       target_url:
         description: 'Target URL'
         required: true
-        default: 'https://example.com'
+        default: 'https://medium-cloudflare.dstat123.uk/f5ec318d-b3d5-499d-8993-8ded350cfbf7'
 
 jobs:
   attack-job:
